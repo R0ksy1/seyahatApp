@@ -1,0 +1,50 @@
+package com.roksy.seyahatuygulamasi.security.config;
+
+import com.roksy.seyahatuygulamasi.security.filter.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
+
+    public static final String[] WHITELIST = {
+            "/api/auth/**",
+            "/h2-console/**"
+    };
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(WHITELIST).permitAll()
+                        .anyRequest().authenticated()
+                )
+                // Spring'e hangi kimlik doğrulama sistemini kullanacağını söylüyoruz.
+                .authenticationProvider(authenticationProvider)
+
+                // Kendi güvenlik görevlimizi (filtremizi) standart kontrolden önce devreye sokuyoruz.
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .headers(headers -> headers
+                        .frameOptions(frameOptions -> frameOptions.disable())
+                );
+
+        return http.build();
+    }
+}
