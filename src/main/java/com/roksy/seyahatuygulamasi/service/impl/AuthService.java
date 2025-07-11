@@ -5,8 +5,6 @@ import com.roksy.seyahatuygulamasi.common.dto.RegisterDto;
 import com.roksy.seyahatuygulamasi.data.jpa.UserEntity;
 import com.roksy.seyahatuygulamasi.data.repository.UserRepository;
 import com.roksy.seyahatuygulamasi.service.IAuthService;
-import com.roksy.seyahatuygulamasi.service.IJwtService;
-import org.apache.catalina.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;

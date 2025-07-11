@@ -1,0 +1,77 @@
+### =======================================
+### KULLANICI İŞLEMLERİ
+### =======================================
+
+### ADIM 1: Yeni bir kullanıcı kaydet (Sadece ilk seferde çalıştır)
+# @name registerRequest
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "seyahat_sever",
+  "email": "seyahat@sever.com",
+  "password": "password123"
+}
+
+
+### ADIM 2: Giriş yap ve bir JWT al
+# @name loginRequest
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "seyahat_sever",
+  "password": "password123"
+}
+
+
+### =======================================
+### PLAN CRUD TESTLERİ
+### =======================================
+
+
+
+### ADIM 3: Yeni bir seyahat planı oluştur
+# @name createPlanRequest
+POST http://localhost:8080/api/v1/plans
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzZXlhaGF0X3NldmVyIiwiaWF0IjoxNzUyMjM1ODY1LCJleHAiOjE3NTIzMjIyNjV9.cEAXIwdZUY-arcGuKh09J2ql2636ToRmxkH42sNh6H_QK84d8-pgHX4tP9gdWwfz
+Content-Type: application/json
+
+{
+  "planAdi": "Unutulmaz Paris Macerası",
+  "sehir": "Paris",
+  "baslangicTarih": "2025-09-20",
+  "bitisTarih": "2025-09-27"
+}
+
+
+
+
+### ADIM 4: Giriş yapmış kullanıcının tüm planlarını listele
+GET http://localhost:8080/api/v1/plans
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzZXlhaGF0X3NldmVyIiwiaWF0IjoxNzUyMjM1ODY1LCJleHAiOjE3NTIzMjIyNjV9.cEAXIwdZUY-arcGuKh09J2ql2636ToRmxkH42sNh6H_QK84d8-pgHX4tP9gdWwfz
+
+
+### ADIM 5: Az önce oluşturulan planın detaylarını ID ile getir
+GET http://localhost:8080/api/v1/plans/1
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzZXlhaGF0X3NldmVyIiwiaWF0IjoxNzUyMjM1ODY1LCJleHAiOjE3NTIzMjIyNjV9.cEAXIwdZUY-arcGuKh09J2ql2636ToRmxkH42sNh6H_QK84d8-pgHX4tP9gdWwfz
+
+
+### ADIM 6: Planı güncelle (Sadece plan adını değiştirelim)
+PUT http://localhost:8080/api/v1/plans/1
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzZXlhaGF0X3NldmVyIiwiaWF0IjoxNzUyMjM1ODY1LCJleHAiOjE3NTIzMjIyNjV9.cEAXIwdZUY-arcGuKh09J2ql2636ToRmxkH42sNh6H_QK84d8-pgHX4tP9gdWwfz
+Content-Type: application/json
+
+{
+  "planAdi": "DEĞİŞTİRİLDİ - Harika Paris Macerası"
+}
+
+
+### ADIM 7: Planı sil
+DELETE http://localhost:8080/api/v1/plans/2
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzZXlhaGF0X3NldmVyIiwiaWF0IjoxNzUyMjM1ODY1LCJleHAiOjE3NTIzMjIyNjV9.cEAXIwdZUY-arcGuKh09J2ql2636ToRmxkH42sNh6H_QK84d8-pgHX4tP9gdWwfz
+
+
+### ADIM 8: Silindiğini doğrula (404 Not Found hatası almalısın)
+GET http://localhost:8080/api/v1/plans/1
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzZXlhaGF0X3NldmVyIiwiaWF0IjoxNzUyMjM1ODY1LCJleHAiOjE3NTIzMjIyNjV9.cEAXIwdZUY-arcGuKh09J2ql2636ToRmxkH42sNh6H_QK84d8-pgHX4tP9gdWwfz
